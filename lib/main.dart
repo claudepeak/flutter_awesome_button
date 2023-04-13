@@ -56,9 +56,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       Icons.add,
                       color: Colors.black,
                     ),
-                    color: Colors.red,
+                    color: Colors.blue,
                     outline: false,
-                    radius: 5,
+                    radius: 20,
                     disabled: false,
                     loading: loading,
                     loadingWidget: const CircularProgressIndicator.adaptive(
@@ -73,16 +73,18 @@ class _MyHomePageState extends State<MyHomePage> {
             child: SizedBox(
               width: 300,
               child: AwesomeButtonBuilder()
-                  .fromOptions(ButtonOptions(
-                    onPressed: () => setState(() => loading = !loading),
-                    text: const Text('Awesome Elevated Button'),
-                    icon: const Icon(Icons.add),
-                    color: Colors.red,
-                    outline: false,
-                    radius: 20,
-                    disabled: false,
-                    loading: loading,
-                  ))
+                  .fromOptions(
+                    ButtonOptions(
+                      onPressed: () => setState(() => loading = !loading),
+                      text: const Text('Awesome Elevated Button'),
+                      icon: const Icon(Icons.add),
+                      color: Colors.red,
+                      outline: false,
+                      radius: 20,
+                      disabled: false,
+                      loading: loading,
+                    ),
+                  )
                   .buildElevatedButton(),
             ),
           ),

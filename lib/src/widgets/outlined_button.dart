@@ -30,15 +30,13 @@ class _OutlinedButton extends _ButtonWidget {
       key: key,
       onPressed: !_disabled ? _onPressed : null,
       style: OutlinedButton.styleFrom(
-        backgroundColor: Colors.transparent,
+        backgroundColor: _loading ? Colors.grey.shade300 : Colors.transparent,
         disabledBackgroundColor: Colors.transparent,
         side: BorderSide(
-          color: _color,
+          color: _loading ? Colors.grey.shade400 : _color,
           width: 2,
         ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(_radius),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(_radius)),
       ),
       child: _loading
           ? _loadingWidget

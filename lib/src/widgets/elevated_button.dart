@@ -26,28 +26,39 @@ class _ElevatedButton extends _ButtonWidget {
         );
   @override
   Widget build(BuildContext context) {
+    final buttonStyle = _outline
+        ? ElevatedButton.styleFrom(
+            foregroundColor: _loading
+                ? Colors.grey.shade400
+                : _disabled
+                    ? Colors.white.withOpacity(0.5)
+                    : Colors.white,
+            backgroundColor: Colors.transparent,
+            disabledBackgroundColor: Colors.transparent,
+            side: BorderSide(
+              color: _color,
+              width: 2,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(_radius),
+            ),
+          )
+        : OutlinedButton.styleFrom(
+            backgroundColor: _loading
+                ? Colors.grey.shade500
+                : _disabled
+                    ? Colors.grey.shade400
+                    : _color,
+            foregroundColor: _disabled ? Colors.white.withOpacity(0.5) : Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(_radius),
+            ),
+          );
+
     return ElevatedButton(
       key: key,
       onPressed: !_disabled ? _onPressed : null,
-      style: !_outline
-          ? OutlinedButton.styleFrom(
-              backgroundColor: _disabled ? Colors.grey.shade400 : _color,
-              foregroundColor: _disabled ? Colors.white.withOpacity(0.5) : Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(_radius),
-              ),
-            )
-          : ElevatedButton.styleFrom(
-              backgroundColor: Colors.transparent,
-              disabledBackgroundColor: Colors.transparent,
-              side: BorderSide(
-                color: _color,
-                width: 2,
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(_radius),
-              ),
-            ),
+      style: buttonStyle,
       child: _loading
           ? _loadingWidget
           : Row(
