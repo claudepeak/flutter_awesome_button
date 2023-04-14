@@ -10,6 +10,7 @@ class _OutlinedButton extends _ButtonWidget {
     required bool disabled,
     required bool loading,
     required double radius,
+    required double borderWidth,
     required Function()? onPressed,
     required Widget? loadingWidget,
   }) : super(
@@ -21,6 +22,7 @@ class _OutlinedButton extends _ButtonWidget {
           disabled: disabled,
           loading: loading,
           radius: radius,
+          borderWidth: borderWidth,
           onPressed: onPressed,
           loadingWidget: loadingWidget,
         );
@@ -32,22 +34,34 @@ class _OutlinedButton extends _ButtonWidget {
       style: OutlinedButton.styleFrom(
         backgroundColor: _loading ? Colors.grey.shade300 : Colors.transparent,
         disabledBackgroundColor: Colors.transparent,
-        side: BorderSide(
-          color: _loading ? Colors.grey.shade400 : _color,
-          width: 2,
-        ),
+        side: BorderSide(color: _loading ? Colors.grey.shade400 : _color, width: _borderWidth),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(_radius)),
       ),
-      child: _loading
-          ? _loadingWidget
-          : Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _icon,
-                _text,
-              ],
+      child: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 200),
+        transitionBuilder: (child, animation) {
+          return FadeTransition(
+            opacity: Tween<double>(
+              begin: 0,
+              end: 1,
+            ).animate(animation),
+            child: ScaleTransition(
+              scale: Tween<double>(
+                begin: 0.5,
+                end: 1,
+              ).animate(animation),
+              child: child,
             ),
+          );
+        },
+        child: _loading
+            ? _loadingWidget
+            : Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [_icon, _text],
+              ),
+      ),
     );
   }
 }

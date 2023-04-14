@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_awesome_button/src/awesome_button_builder.dart';
 import 'package:flutter_awesome_button/src/model/button_options_model.dart';
+import 'package:flutter_awesome_button/src/widgets/progress_button.dart';
 
 void main() {
   runApp(const MyApp());
@@ -48,14 +49,8 @@ class _MyHomePageState extends State<MyHomePage> {
               child: AwesomeButtonBuilder()
                   .fromOptions(ButtonOptions(
                     onPressed: () => setState(() => loading = !loading),
-                    text: const Text(
-                      'Awesome Outlined Button',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    icon: const Icon(
-                      Icons.add,
-                      color: Colors.black,
-                    ),
+                    text: const Text('Awesome Outlined Button', style: TextStyle(color: Colors.black)),
+                    icon: const Icon(Icons.add, color: Colors.black),
                     color: Colors.blue,
                     outline: false,
                     radius: 20,
@@ -88,6 +83,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   .buildElevatedButton(),
             ),
           ),
+          const SizedBox(height: 20),
+          UploadButton(),
         ],
       ),
     );

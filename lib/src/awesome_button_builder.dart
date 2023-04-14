@@ -5,21 +5,23 @@ part './widgets/button_widget.dart';
 part './widgets/elevated_button.dart';
 part './widgets/outlined_button.dart';
 
+// A builder class for creating awesome buttons
 class AwesomeButtonBuilder {
-  Key? _key;
-  Widget? _text;
-  Widget? _icon;
-  Color? _color;
+  Key? _key; // The button key
+  Widget? _text; // The button text widget
+  Widget? _icon; // The button icon widget
+  Color? _color; // The button color
 
-  bool? _outline = false;
-  bool? _disabled = false;
-  bool? _loading = false;
-  double? _radius = 10;
+  bool? _outline = false; // Whether the button should be outlined or not
+  bool? _disabled = false; // Whether the button is disabled or not
+  bool? _loading = false; // Whether the button is in a loading state or not
+  double? _radius = 10; // The button border radius
+  double? _borderWidth = 2; // The button border width
 
-  Function()? _onPressed;
-  Widget? _loadingWidget;
+  Function()? _onPressed; // The callback function when the button is pressed
+  Widget? _loadingWidget; // The loading widget to display while the button is loading
 
-  /// Creating options for the button
+  /// Sets options for the button
   AwesomeButtonBuilder fromOptions(ButtonOptions options) {
     _key = options.key ?? UniqueKey();
     _text = options.text ?? const SizedBox.shrink();
@@ -29,6 +31,7 @@ class AwesomeButtonBuilder {
     _disabled = options.disabled ?? false;
     _color = options.color ?? Colors.blueAccent.shade400;
     _radius = options.radius;
+    _borderWidth = options.borderWidth ?? 2;
     _onPressed = options.onPressed ?? () {};
     _loadingWidget = options.loadingWidget ??
         const CircularProgressIndicator.adaptive(
@@ -39,7 +42,7 @@ class AwesomeButtonBuilder {
     return this;
   }
 
-  /// Creates a Elevated button
+  /// Builds an elevated button
   Widget buildElevatedButton() {
     return _ElevatedButton(
       loadingWidget: _loadingWidget!,
@@ -52,11 +55,14 @@ class AwesomeButtonBuilder {
       disabled: _disabled!,
       loading: _loading!,
       radius: _radius!,
+      borderWidth: _borderWidth!,
     );
   }
 
+  /// Builds an outlined button
   Widget buildOutlinedButton() {
     return _OutlinedButton(
+      borderWidth: _borderWidth!,
       loadingWidget: _loadingWidget!,
       key: _key!,
       onPressed: _onPressed!,

@@ -10,6 +10,7 @@ class _ElevatedButton extends _ButtonWidget {
     required bool disabled,
     required bool loading,
     required double radius,
+    required double borderWidth,
     required Function()? onPressed,
     required Widget? loadingWidget,
   }) : super(
@@ -21,6 +22,7 @@ class _ElevatedButton extends _ButtonWidget {
           disabled: disabled,
           loading: loading,
           radius: radius,
+          borderWidth: borderWidth,
           onPressed: onPressed,
           loadingWidget: loadingWidget,
         );
@@ -37,7 +39,7 @@ class _ElevatedButton extends _ButtonWidget {
             disabledBackgroundColor: Colors.transparent,
             side: BorderSide(
               color: _color,
-              width: 2,
+              width: _borderWidth,
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(_radius),
@@ -59,16 +61,35 @@ class _ElevatedButton extends _ButtonWidget {
       key: key,
       onPressed: !_disabled ? _onPressed : null,
       style: buttonStyle,
-      child: _loading
-          ? _loadingWidget
-          : Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _icon,
-                _text,
-              ],
+      child: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 200),
+        transitionBuilder: (child, animation) {
+          return FadeTransition(
+            opacity: Tween<double>(
+              begin: 0,
+              end: 1,
+            ).animate(animation),
+            child: ScaleTransition(
+              scale: Tween<double>(
+                begin: 0.5,
+                end: 1,
+              ).animate(animation),
+              child: child,
             ),
+          );
+        },
+        child: _loading
+            ? _loadingWidget
+            : Row(
+                key: UniqueKey(),
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _icon,
+                  _text,
+                ],
+              ),
+      ),
     );
   }
 }

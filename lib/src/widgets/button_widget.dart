@@ -8,6 +8,7 @@ abstract class _ButtonWidget extends StatelessWidget {
   final bool _disabled;
   final bool _loading;
   final double _radius;
+  final double _borderWidth;
   final Function()? _onPressed;
   final Widget? _loadingWidget;
   const _ButtonWidget({
@@ -19,6 +20,7 @@ abstract class _ButtonWidget extends StatelessWidget {
     required bool disabled,
     required bool loading,
     required double radius,
+    required double borderWidth,
     required Function()? onPressed,
     required Widget? loadingWidget,
   })  : _text = text,
@@ -28,6 +30,7 @@ abstract class _ButtonWidget extends StatelessWidget {
         _disabled = disabled,
         _loading = loading,
         _radius = radius,
+        _borderWidth = borderWidth,
         _onPressed = onPressed,
         _loadingWidget = loadingWidget,
         super(key: key);
