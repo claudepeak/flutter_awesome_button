@@ -1,73 +1,105 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 
-class UploadButton extends StatefulWidget {
-  const UploadButton({
-    Key? key,
-    this.onPressed,
-  }) : super(key: key);
+import '../model/button_options_model.dart';
 
-  final VoidCallback? onPressed;
+class UploadButton extends StatefulWidget {
+  final ButtonOptions? buttonOptions;
+
+  UploadButton({this.buttonOptions});
 
   @override
   _UploadButtonState createState() => _UploadButtonState();
 }
 
 class _UploadButtonState extends State<UploadButton> {
-  double _progressValue = 0.0;
-  bool _inProgress = false;
+  double progress = 1.0;
+  double? radius;
+  bool isStarted = false;
+  Color? buttonColor;
 
-  void _startProgress() {
-    _inProgress = true;
-    _progressValue = 0.0;
+  void startUpload() {
+    // Simulate file upload
     Timer.periodic(const Duration(milliseconds: 100), (timer) {
-      if (_progressValue < 1) {
+      if (progress < 1) {
         setState(() {
-          _progressValue += 0.01;
+          progress += 0.01;
         });
       } else {
         timer.cancel();
-        _inProgress = false;
       }
     });
   }
 
   @override
-  Widget build(BuildContext context) {
-    final buttonColor = _inProgress ? Colors.grey.shade500 : Colors.blueAccent.shade400;
+  void initState() {
+    super.initState();
+    radius = widget.buttonOptions?.radius ?? 10;
+    buttonColor = widget.buttonOptions?.color ?? Colors.blue;
+  }
 
-    return ElevatedButton(
-      onPressed: _inProgress
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: widget.buttonOptions?.disabled ?? false
           ? null
-          : () async {
-              _startProgress();
-              widget.onPressed?.call();
+          : () {
+              setState(() {
+                progress = 0.0;
+                isStarted = true;
+              });
+              startUpload();
             },
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all<Color>(buttonColor),
-      ),
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          if (_inProgress)
-            Positioned.fill(
-              child: LinearProgressIndicator(
-                backgroundColor: Colors.grey.shade400,
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                value: _progressValue,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(radius!),
+          color: Colors.blue[50],
+        ),
+        width: MediaQuery.of(context).size.width - 100,
+        height: 56,
+        child: Stack(
+          children: [
+            buildUploadButton(),
+            Center(
+              child: Text(
+                _displayText(),
+                style: const TextStyle(color: Colors.white, fontSize: 20.0),
               ),
             ),
-          Text(
-            _inProgress ? '${(_progressValue * 100).toInt()}%' : 'Upload',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 18.0,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
+  }
+
+  Widget buildUploadButton() {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.linear,
+      width: progress * (MediaQuery.of(context).size.width - 100),
+      height: 56,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(radius!),
+          bottomLeft: Radius.circular(radius!),
+          topRight: Radius.circular(progress < 1.0 ? 0 : radius!),
+          bottomRight: Radius.circular(progress < 1.0 ? 0 : radius!),
+        ),
+        color: buttonColor,
+      ),
+      child: const SizedBox.shrink(),
+    );
+  }
+
+  String _displayText() {
+    if (!isStarted && progress == 1.0) {
+      return 'Start the upload';
+    } else if (isStarted && progress == 1.0) {
+      return 'Upload Complete';
+    } else if (isStarted && progress < 1.0) {
+      return 'Uploading...';
+    } else {
+      return 'Upload Successful';
+    }
   }
 }
