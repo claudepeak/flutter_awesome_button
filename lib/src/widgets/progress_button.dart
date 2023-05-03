@@ -6,7 +6,7 @@ import '../model/button_options_model.dart';
 class UploadButton extends StatefulWidget {
   final ButtonOptions? buttonOptions;
 
-  UploadButton({this.buttonOptions});
+  const UploadButton({super.key, this.buttonOptions});
 
   @override
   _UploadButtonState createState() => _UploadButtonState();
@@ -94,10 +94,10 @@ class _UploadButtonState extends State<UploadButton> {
   String _displayText() {
     if (!isStarted && progress == 1.0) {
       return 'Start the upload';
-    } else if (isStarted && progress == 1.0) {
-      return 'Upload Complete';
+    } else if ((isStarted && progress == 1.0) || (isStarted && progress > 1.0)) {
+      return 'Upload Completed';
     } else if (isStarted && progress < 1.0) {
-      return 'Uploading...';
+      return 'Uploading %${(progress * 100).toStringAsFixed(0)}';
     } else {
       return 'Upload Successful';
     }
